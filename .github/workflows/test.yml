@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+      with:
+        repository: rubocop/rubocop
+        bundler-cache: true
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-    - uses: actions/checkout@v4
-      with:
-        repository: rubocop/rubocop
     - run: bundle install
     - run: ruby -I lib -r bundler/setup -r rubocop -e 'exit 0'
