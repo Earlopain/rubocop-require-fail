@@ -1,0 +1,20 @@
+name: My workflow
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Due to https://github.com/actions/runner/issues/849, we have to use quotes for '3.0'
+        ruby: ['3.4', head]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - uses: actions/checkout@v4
+      with:
+        repository: rubocop/rubocop
+    - run: bundle install
+    - run: ruby -I lib -r bundler/setup -r rubocop -e 'exit 0'
